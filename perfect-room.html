@@ -85,6 +85,9 @@
             <td>Action:</td>
             <td><input class="info" id="action" type="text" value="0"/></td>
         </tr>
+        <ul id="objects">
+
+        </ul>
     </table>
     <div id="divTexture">
         <canvas height="256" id="canvasTexture" width="256"/>
@@ -152,13 +155,13 @@
         camera.position.set(50 / 2.54, 170 / 2.54, 600 / 2.54);
         controls = new OrbitControls(camera, renderer.domElement);
         controls.target.set(0, 160 / 2.54, 0);
-        controls.minAzimuthAngle = THREE.Math.degToRad(-70.0);
-        controls.maxAzimuthAngle = THREE.Math.degToRad(80.0);
+        // controls.minAzimuthAngle = THREE.Math.degToRad(-70.0);
+        // controls.maxAzimuthAngle = THREE.Math.degToRad(80.0);
         //controls.minPolarAngle = THREE.Math.degToRad(50.0);
-       // controls.maxPolarAngle = THREE.Math.degToRad(140.0);
-        controls.minDistance = 100 / 2.54;
-        controls.maxDistance = 1000 / 2.54;
-        controls.enablePan = false;
+       // // controls.maxPolarAngle = THREE.Math.degToRad(140.0);
+       //  controls.minDistance = 100 / 2.54;
+       //  controls.maxDistance = 1000 / 2.54;
+       //  controls.enablePan = false;
         controls.update();
 
 // création de la scène
@@ -167,7 +170,7 @@
 
         clock.start();
         var loader = new ColladaLoader();
-        loader.load('./models/room_durand_gaultier_1.1.dae', onLoaded, onProgress, onError);
+        loader.load('./models/room_durand_gaultier_1.3.1.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
         var ambientLight = new THREE.AmbientLight(0x202020);
@@ -273,6 +276,7 @@
         };
         animations.push(button);
 
+        console.log("sjgkljdfgnlkdfjgblkdfjg",object.getObjectByName("Clavier"))
 
         button2.onClick = function (intersection) {
             let spot2 = object.getObjectByName("spot2");
@@ -368,11 +372,6 @@
         }
         animations.push(porte)
 
-        let clavier = object.getObjectByName("clavier_ordi");
-
-        clavier.scale.set(100,100,100);
-
-        console.log("zkjrhzeugruzqeyrgozeriry",clavier)
 
         let verrou = object.getObjectByName("verrou");
         verrou.animationStatus = 0;
@@ -462,6 +461,16 @@
         porte.children[2].material[1].emissiveMap = canvaMaterial;
         porte.children[2].material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
         drawCanvas();
+        //
+        // let ul = document.querySelector("#objects");
+        //
+        // object.traverse(function (obj){
+        //     // let li = document.createElement("li");
+        //     // li.innerHTML = obj.name;
+        //     // ul.appendChild(li);
+        //
+        //     obj.scale.set(0.5,0.5,0.5)
+        // })
 
 
     }
