@@ -4,7 +4,9 @@
     <title>Perfect Room</title>
     <meta charset="UTF-8">
     <link href="images/icon.png" rel="icon" type="image/png"/>
-    <style>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">    <style>
         body {
             margin: 0px;
             padding: 0px;
@@ -28,24 +30,26 @@
             top: 10px;
             right: 10px;
             bottom: 10px;
-            background-color: #EEEEEE;
+            background-color: white;
             border: 2px solid white;
             padding: 5px;
             font-size: 14pt;
             font-family: times new roman;
             font-weight: bold;
-            font-style: italic;
             color: black;
+            font-family: 'Montserrat', sans-serif;
         }
 
         input {
-            background-color: #FFFFFF;
+            background-color: #e7e7e7;
             border: none;
             width: 260px;
             color: black;
             font-size: 14pt;
             font-family: times new roman;
             font-weight: bold;
+            padding: .5rem;
+            border-radius: 2rem;
         }
 
         #divTexture {
@@ -66,6 +70,22 @@
             height: 256px;
             background: white;
         }
+
+        h1,h4{
+            font-family: 'Oswald', sans-serif;
+            color: #E07D32;
+        }
+
+        .title{
+            color: #9382E0;
+            margin-top: 1rem;
+        }
+
+        table{
+            margin-top: 1rem;
+        }
+
+
     </style>
 </head>
 <body>
@@ -74,15 +94,17 @@
 <div id="info">
     <table>
         <tr>
-            <td>Click position:</td>
+            <h1>Perfect Room</h1>
+            <h4>Timothée Durand & Cécile Gaultier MMI2</h4>
+            <td class="title">Click position:</td>
             <td><input class="info" id="positions" type="text" value="(0;0)"/></td>
         </tr>
         <tr>
-            <td>Clicked object:</td>
+            <td class="title">Clicked object:</td>
             <td><input class="info" id="obj_name" type="text" value="vide"/></td>
         </tr>
         <tr>
-            <td>Touches :</td>
+            <td class="title">Touches :</td>
             <td>
                 <ul>
                     <li><strong>Espace :</strong> Bloquer / Débloquer la caméra</li>
@@ -92,7 +114,7 @@
             </td>
         </tr>
         <tr>
-            <td>Action:</td>
+            <td class="title">Action:</td>
             <td><input class="info" id="action" type="text" value="0"/></td>
         </tr>
         <ul id="objects">
@@ -192,7 +214,7 @@
 
         clock.start();
         var loader = new ColladaLoader();
-        loader.load('./models/room_durand_gaultier_2.1.dae', onLoaded, onProgress, onError);
+        loader.load('./models/room_durand_gaultier_4.6.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
         var ambientLight = new THREE.AmbientLight(0x202020);
@@ -263,6 +285,7 @@
         document.getElementById('action').value = "Load completed after " + dt.toFixed(2) + " s.";
 
         let light1 = object.getObjectByName('spot1');
+        light1.power=0.6*Math.PI;
         light1.penumbra = 43.0 / 60.0;
         light1.distance = 170.0 / 2.54;
         light1.target = object.getObjectByName('spot1.Target');
@@ -284,39 +307,106 @@
         mat2.emissive = new THREE.Color(0.0, 1.0, 0.0);
         button2.state = true;
 
+        let button3 = object.getObjectByName('button003');
+        button.rotation.x = THREE.Math.degToRad(-10.0);
+        let mat3 = button3.material.clone();
+        mat3.color = new THREE.Color(0.0, 1.0, 0.0);
+        mat3.emissive = new THREE.Color(0.0, 1.0, 0.0);
+        button3.state = false;
+
+
+        //lumière cadre
         button.onClick = function (intersection) {
-            this.state = !this.state;
-            light1.visible = this.state;
+            
             if (this.state) {
                 this.material = myMat;
                 this.rotation.x = THREE.Math.degToRad(-10.0);
+                this.state = !this.state;
+                light1.visible = this.state;
             } else {
                 this.material = mat2;
                 this.rotation.x = THREE.Math.degToRad(10.0);
+                this.state = !this.state;
+                light1.visible = this.state;
             }
         };
         button.updateAnimation = (dt) => {
         };
         animations.push(button);
 
-        console.log("sjgkljdfgnlkdfjgblkdfjg", object.getObjectByName("Clavier"))
+
+        //lumière plafond 1
+        let spot2 = object.getObjectByName("spot2");
+        spot2.power=0.9*Math.PI;
+        spot2.visible = true; 
 
         button2.onClick = function (intersection) {
-            let spot2 = object.getObjectByName("spot2");
-            this.state = !this.state;
-            spot2.visible = this.state;
+            
 
             if (this.state) {
                 this.material = myMat;
                 this.rotation.x = THREE.Math.degToRad(-10.0);
+                this.state = !this.state;
+                spot2.visible = this.state;
             } else {
                 this.material = mat2;
                 this.rotation.x = THREE.Math.degToRad(10.0);
+                this.state = !this.state;
+                spot2.visible = this.state;
             }
         };
         button2.updateAnimation = (dt) => {
         };
         animations.push(button2);
+
+
+        //lumière plafond 2
+        let spot3 = object.getObjectByName("spot3");
+        spot3.power=0.9*Math.PI;
+        spot3.visible = true; 
+
+
+        button3.onClick = function (intersection) {
+            
+            if (this.state) {
+                this.material = myMat;
+                this.rotation.x = THREE.Math.degToRad(-10.0);
+                this.state = !this.state;
+                spot3.visible = this.state;
+
+            } else {
+                this.material = mat2;
+                this.rotation.x = THREE.Math.degToRad(10.0);
+                this.state = !this.state;
+                spot3.visible = this.state;
+            }
+        };
+        button3.updateAnimation = (dt) => {
+        };
+        animations.push(button3);
+
+        //lumière lampe bureau
+        let spot4 = object.getObjectByName("spot_lampe_bureau");
+        spot4.power=0.5*Math.PI;
+        spot4.penumbra = 40.0 / 80.0;
+        spot4.distance = 100.0 / 2.54;
+        spot4.target = object.getObjectByName('spot_lampe_bureau.Target');
+        spot4.visible = true; //éteint la lumière
+
+        // let lampe = object.getObjectByName("lampe_bureau");
+        // lampe.onClick = function (intersection) {
+        //     if (this.state) {
+        //         this.state = !this.state;
+        //         spot4.visible = this.state;
+        //         console.log("etat : ",spot4.state);
+
+        //     } else {
+        //         this.state = !this.state;
+        //         spot4.visible = this.state;
+        //         console.log("etat : ",spot4.state);
+
+        //     }
+        // };
 
         let cadre = object.getObjectByName("cadre");
         animations.push(cadre);
