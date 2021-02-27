@@ -82,6 +82,16 @@
             <td><input class="info" id="obj_name" type="text" value="vide"/></td>
         </tr>
         <tr>
+            <td>Touches :</td>
+            <td>
+                <ul>
+                    <li><strong>Espace :</strong> Bloquer / Débloquer la caméra</li>
+                    <li><strong>z :</strong> Monter la caméra</li>
+                    <li><strong>s :</strong> Descendre la caméra</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td>Action:</td>
             <td><input class="info" id="action" type="text" value="0"/></td>
         </tr>
@@ -96,8 +106,11 @@
 
 <script type="module">
     import * as THREE from './three.js-dev/build/three.module.js';
-    import {OrbitControls} from './three.js-dev/examples/jsm/controls/OrbitControls.js';
+    //import { OrbitControls } from './three.js-dev/examples/jsm/controls/OrbitControls.js';
+    import {FirstPersonControls} from './three.js-dev/examples/jsm/controls/FirstPersonControls.js';
     import {ColladaLoader} from './three.js-dev/examples/jsm/loaders/ColladaLoader.js';
+    import {MeshPhongMaterial} from "./three.js-dev/build/three.module.js";
+
 
     var clickInfo = [];
     //tableau qui contient la liste des objets clickables
@@ -113,11 +126,20 @@
 
     let canvaTexture, canvaContext, textureEcran, canvaMaterial;
 
+    let hauteurRegard = 70, isMoving = false;
+
     function onClickEvent(event) {
         clickInfo.userHasClicked = true;
         clickInfo.mouse = new THREE.Vector2();
         clickInfo.mouse.x = ((event.clientX - SCREEN_LEFT) / SCREEN_WIDTH) * 2 - 1;
         clickInfo.mouse.y = -((event.clientY - SCREEN_TOP) / SCREEN_HEIGHT) * 2 + 1;
+    }
+
+    function onKeyEvent(event) {
+        //console.log(event);
+        if (event.code === 'Space') isMoving = !isMoving;
+        if (event.key === 'z') hauteurRegard += 2;
+        if (event.key === 's') hauteurRegard -= 2;
     }
 
     function onWindowResize() {
@@ -138,7 +160,7 @@
 // création d'un canvas dans un div
         renderer.setClearColor(0x222222, 1);
         window.addEventListener('resize', onWindowResize, false);
-
+        document.addEventListener('keypress', onKeyEvent);
         container.appendChild(renderer.domElement);
         container.addEventListener('click', onClickEvent, false);
 
@@ -150,19 +172,19 @@
         SCREEN_TOP = container.offsetTop - container.scrollTop + container.clientTop;
         renderer.setSize(w, h);
 
+
 // création d'une caméra perspective(angle d'ouverture, rapport largeur/hauteur, near, far)
-        camera = new THREE.PerspectiveCamera(30, w / h, 1, 60000);
-        camera.position.set(50 / 2.54, 170 / 2.54, 600 / 2.54);
-        controls = new OrbitControls(camera, renderer.domElement);
-        controls.target.set(0, 160 / 2.54, 0);
-        // controls.minAzimuthAngle = THREE.Math.degToRad(-70.0);
-        // controls.maxAzimuthAngle = THREE.Math.degToRad(80.0);
-        //controls.minPolarAngle = THREE.Math.degToRad(50.0);
-       // // controls.maxPolarAngle = THREE.Math.degToRad(140.0);
-       //  controls.minDistance = 100 / 2.54;
-       //  controls.maxDistance = 1000 / 2.54;
-       //  controls.enablePan = false;
-        controls.update();
+        camera = new THREE.PerspectiveCamera(60, w / h, 10, 5000);
+        camera.position.set(0, hauteurRegard, 70); // placer dans le repère principal avec y vers le hauteur
+        camera.lookAt(new THREE.Vector3(1, 50, 0));
+
+        controls = new FirstPersonControls(camera);
+        controls.lookSpeed = 0.15;
+        controls.movementSpeed = 50;
+        controls.lookVertical = true;
+        controls.constrainVertical = true;
+        controls.verticalMin = Math.PI / 6.0; // entre 0 et PI
+        controls.verticalMax = 5.0 * Math.PI / 6.0;
 
 // création de la scène
         scene = new THREE.Scene();
@@ -185,8 +207,10 @@
     }
 
     function animate() {
+        let dt = clock.getDelta();
 // rendu de la scène
-        controls.update();
+        if (isMoving) controls.update(dt);
+        camera.position.y = hauteurRegard;
         renderer.render(scene, camera);
 
         // détection du picking
@@ -214,7 +238,6 @@
             }
         }
 
-        let dt = clock.getDelta();
 
         animations.forEach(function (anim) {
             //si il y a une animation à lancer la met à jour
@@ -276,7 +299,7 @@
         };
         animations.push(button);
 
-        console.log("sjgkljdfgnlkdfjgblkdfjg",object.getObjectByName("Clavier"))
+        console.log("sjgkljdfgnlkdfjgblkdfjg", object.getObjectByName("Clavier"))
 
         button2.onClick = function (intersection) {
             let spot2 = object.getObjectByName("spot2");
@@ -415,7 +438,7 @@
         poignee.onClick = function (intersection) {
             console.log(this.animationStatus)
 
-            if(!codeBon) return;
+            if (!codeBon) return;
 
             switch (this.animationStatus) {
                 case 0:
@@ -522,13 +545,13 @@
 
                 switch (xCode) {
                     case 1 :
-                        currentCode = currentCode.slice(0, currentCode.length-3);
+                        currentCode = currentCode.slice(0, currentCode.length - 3);
                         break;
                     case 2 :
                         caracCode = "0";
                         break;
                     case 3 :
-                        if(getNumberCarac(currentCode) >= 4) {
+                        if (getNumberCarac(currentCode) >= 4) {
                             caracCode = "#";
                         }
                         break;
@@ -538,7 +561,7 @@
 
         currentCode = currentCode + caracCode + " ";
 
-        if(currentCode.slice(1, currentCode.length) === goodCode) {
+        if (currentCode.slice(1, currentCode.length) === goodCode) {
             codeBon = true;
 
         } else {
@@ -551,8 +574,8 @@
 
     function getNumberCarac(code) {
         let nReturn = 0;
-        for(let codeC in code.split(" ")) {
-            if(codeC !== "") {
+        for (let codeC in code.split(" ")) {
+            if (codeC !== "") {
                 //si c'est un caractère
                 nReturn++;
             }
