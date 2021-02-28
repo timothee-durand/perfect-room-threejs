@@ -223,7 +223,7 @@
 
         clock.start();
         var loader = new ColladaLoader();
-        loader.load('./models/room_durand_gaultier_4.6.dae', onLoaded, onProgress, onError);
+        loader.load('./models/room_durand_gaultier_4.7.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
         var ambientLight = new THREE.AmbientLight(0x202020);
@@ -416,6 +416,36 @@
 
         //     }
         // };
+
+        let livre = object.getObjectByName("book_hp_006");
+        animations.push(livre);
+        livre.animationStatus = 0;
+        livre.ymin = 9.9 * 25.4;
+        livre.ymax = 10.8 * 25.4;
+        livre.duration = 5;
+        livre.onClick = function (intersection) {
+            console.log("click sur le livre");
+        }
+        livre.updateAnimation = function (dt) {
+            let dist = dt * (this.ymax - this.ymin) / this.duration;
+            switch (this.animationStatus) {
+                case 1:
+                    this.position.y -= dist;
+                    if (this.position.y < this.ymin) {
+                        this.position.y = this.ymin;
+                        this.animationStatus = 2;
+                    }
+                    break;
+                case 2:
+                    this.position.y += dist;
+                    if (this.position.y > this.ymax) {
+                        this.position.y = this.ymax;
+                        this.animationStatus = 0
+                    }
+                    break
+            }
+
+        };
 
         let cadre = object.getObjectByName("cadre");
         animations.push(cadre);
