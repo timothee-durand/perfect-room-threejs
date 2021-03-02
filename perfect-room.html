@@ -420,9 +420,10 @@
         let livre = object.getObjectByName("book_hp_006");
         animations.push(livre);
         livre.animationStatus = 0;
-        livre.ymin = 9.9 * 25.4;
-        livre.ymax = 10.8 * 25.4;
-        livre.duration = 5;
+        livre.ymin = 49 * 25.4;
+        livre.ymax = 64 * 25.4;
+        livre.duration = 2;
+        livre.waitTime = 5;
         livre.onClick = function (intersection) {
             console.log("click sur le livre");
         }
@@ -434,9 +435,18 @@
                     if (this.position.y < this.ymin) {
                         this.position.y = this.ymin;
                         this.animationStatus = 2;
+                        this.t1 = this.waitTime;
                     }
                     break;
+
                 case 2:
+                    this.t1 -= dt;
+                    if (this.t1 <= 0) {
+                        this.animationStatus = 3;
+                    }
+                    break;
+
+                case 3:
                     this.position.y += dist;
                     if (this.position.y > this.ymax) {
                         this.position.y = this.ymax;
