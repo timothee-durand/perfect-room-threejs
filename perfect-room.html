@@ -227,7 +227,7 @@
         const spotLight = new THREE.SpotLight( 0xffffff );
         spotLight.position.set( 0, 0, 0 );
         spotLight.angle = 0.4;
-        spotLight.intensity = 0.4;
+        spotLight.intensity = 0.3;
         spotLight.penumbra = 0.3;
         spotLight.castShadow = true;
         spotLight.shadow.mapSize.width = 1024;
@@ -236,7 +236,7 @@
         spotLight.shadow.camera.far = 4000;
         spotLight.shadow.camera.fov = 30;
 
-        spotLight.color = new THREE.Color(1,0.6,0);
+        spotLight.color = new THREE.Color(1,1,1);
         camera.add( spotLight );
 
         window.target = new THREE.Object3D();
@@ -251,7 +251,7 @@
 
         clock.start();
         var loader = new ColladaLoader();
-        loader.load('./models/room_durand_gaultier_4.7.dae', onLoaded, onProgress, onError);
+        loader.load('./models/room_durand_gaultier_4.8.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
 //         var ambientLight = new THREE.AmbientLight(0x202020);
@@ -668,10 +668,10 @@
         }
 
         console.log("aracade", object.getObjectByName("arcade"))
-        let arcade = object.getObjectByName("arcade");
+        let arcade = object.getObjectByName("arcade").children[2];
         animations.push(arcade)
         arcade.onClick = function () {
-            changeArcadeScreen(this);
+
         }
         arcade.updateAnimation = function (dt) {
         }
@@ -694,8 +694,25 @@
             this.gameOver = !this.gameOver;
         }
 
-
         arcade.material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
+
+        let bouton1 = object.getObjectByName("bouton1");
+        console.log("bouton1", bouton1)
+        animations.push(bouton1)
+
+        bouton1.onClick = function (){
+            changeArcadeScreen(arcade);
+        }
+        bouton1.updateAnimation = function (dt) {}
+        let green = new THREE.Color(0,0.5,0);
+        bouton1.material = new THREE.MeshPhongMaterial({
+            emissive:green,
+            emissiveColor:green
+        });
+
+        let collision = object.getObjectByName("collision");
+        console.log("col", collision)
+        collision.visible = false;
 
     }
 
@@ -732,7 +749,7 @@
 
     function updateCode(x, y) {
 
-        let caracCode = "";
+        let caracCode = "1";
         if (x * 256 > 12 && x * 256 < 237 && y * 256 > 6 && y * 256 < 206) {
             let xCode = Math.floor((x * 256 - 12) / 75) + 1;
             let yCode = Math.floor(((1 - y) * 256 - 6) / 50) - 1;
@@ -760,7 +777,7 @@
             }
         }
 
-        currentCode = currentCode + caracCode + " ";
+        currentCode = currentCode + caracCode;
 
         if (currentCode.slice(1, currentCode.length) === goodCode) {
             codeBon = true;

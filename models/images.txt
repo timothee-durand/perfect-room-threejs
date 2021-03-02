@@ -1,0 +1,81 @@
+ <image id="MapFBXASC032FBXASC03532-image" name="MapFBXASC032FBXASC03532">
+      <init_from>.\textures\wall.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03542-image" name="MapFBXASC032FBXASC03542">
+      <init_from>.\textures\wall2.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03535-image" name="MapFBXASC032FBXASC03535">
+      <init_from>.\textures\parquet.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC0353-image" name="MapFBXASC032FBXASC0353">
+      <init_from>.\textures\parquet2.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC0352-image" name="MapFBXASC032FBXASC0352">
+      <init_from>.\textures\cake.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC0351-image" name="MapFBXASC032FBXASC0351">
+      <init_from>.\textures\clavier_coffre.png</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03519-image" name="MapFBXASC032FBXASC03519">
+      <init_from>.\textures\brownie.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03518-image" name="MapFBXASC032FBXASC03518">
+      <init_from>.\textures\brownie.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03528-image" name="MapFBXASC032FBXASC03528">
+      <init_from>.\textures\prem_couv_1984.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03518_ncl1_1-image" name="MapFBXASC032FBXASC03518_ncl1_1">
+      <init_from>.\textures\bouche_voldemort@4x-100.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC0358-image" name="MapFBXASC032FBXASC0358">
+      <init_from>.\textures\usb.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03520-image" name="MapFBXASC032FBXASC03520">
+      <init_from>.\textures\torso1.png</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03518_ncl1_2-image" name="MapFBXASC032FBXASC03518_ncl1_2">
+      <init_from>.\textures\face4.png</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03522-image" name="MapFBXASC032FBXASC03522">
+      <init_from>.\textures\screen_2.png</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03523-image" name="MapFBXASC032FBXASC03523">
+      <init_from>.\textures\login_screen.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC0354-image" name="MapFBXASC032FBXASC0354">
+      <init_from>.\textures\clavier.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03529-image" name="MapFBXASC032FBXASC03529">
+      <init_from>.\textures\posti-t.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03519_ncl1_1-image" name="MapFBXASC032FBXASC03519_ncl1_1">
+      <init_from>.\textures\game_over.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03519_ncl1_2-image" name="MapFBXASC032FBXASC03519_ncl1_2">
+      <init_from>.\textures\tissu.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03518_ncl1_3-image" name="MapFBXASC032FBXASC03518_ncl1_3">
+      <init_from>.\textures\wood.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03520_ncl1_1-image" name="MapFBXASC032FBXASC03520_ncl1_1">
+      <init_from>.\textures\wood.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03521-image" name="MapFBXASC032FBXASC03521">
+      <init_from>.\textures\tapis.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03520_ncl1_2-image" name="MapFBXASC032FBXASC03520_ncl1_2">
+      <init_from>.\textures\wood.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC0351_ncl1_1-image" name="MapFBXASC032FBXASC0351_ncl1_1">
+      <init_from>.\textures\couv_hp_3.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03526-image" name="MapFBXASC032FBXASC03526">
+      <init_from>.\textures\prem_couv_hp1_loser.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03541-image" name="MapFBXASC032FBXASC03541">
+      <init_from>.\textures\tv.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03544-image" name="MapFBXASC032FBXASC03544">
+      <init_from>.\textures\tapis-souris.jpg</init_from>
+    </image>
