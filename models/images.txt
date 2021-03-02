@@ -79,3 +79,12 @@
     <image id="MapFBXASC032FBXASC03544-image" name="MapFBXASC032FBXASC03544">
       <init_from>.\textures\tapis-souris.jpg</init_from>
     </image>
+    <image id="MapFBXASC032FBXASC03547-image" name="MapFBXASC032FBXASC03547">
+      <init_from>.\textures\sol2.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03545-image" name="MapFBXASC032FBXASC03545">
+      <init_from>.\textures\mur1.jpg</init_from>
+    </image>
+    <image id="MapFBXASC032FBXASC03546-image" name="MapFBXASC032FBXASC03546">
+      <init_from>.\textures\mur2.jpg</init_from>
+    </image>

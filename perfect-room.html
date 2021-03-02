@@ -131,8 +131,6 @@
     </table>
     <div id="divTexture">
         <canvas height="256" id="canvasTexture" width="256"></canvas>
-        <img alt="" id="textureGameOver" src="models/textures/game_over.jpg">
-        <img alt="" id="textureGamePlay" src="models/textures/game_play.jpg">
     </div>
 </div>
 
@@ -251,7 +249,7 @@
 
         clock.start();
         var loader = new ColladaLoader();
-        loader.load('./models/room_durand_gaultier_4.8.dae', onLoaded, onProgress, onError);
+        loader.load('./models/room_durand_gaultier_5.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
 //         var ambientLight = new THREE.AmbientLight(0x202020);
@@ -450,7 +448,7 @@
         livre.xmin = 25.5;
         livre.xmax = 500 ;
         livre.duration = 1;
-        livre.waitTime = 2;
+        livre.waitTime = 4;
         livre.onClick = function (intersection) {
             console.log("position livre",livre.position);
             if (this.animationStatus == 0) {
@@ -486,13 +484,13 @@
             }
         };
 
-        let tiroir = object.getObjectByName("book_hp_006");
+        let tiroir = object.getObjectByName("t_haut_droit");
         animations.push(tiroir);
         tiroir.animationStatus = 0;
-        tiroir.xmin = 25.5;
-        tiroir.xmax = 500 ;
+        tiroir.xmin = -8;
+        tiroir.xmax = -250;
         tiroir.duration = 1;
-        tiroir.waitTime = 2;
+        tiroir.waitTime = 4;
         tiroir.onClick = function (intersection) {
             console.log("position tiroir",tiroir.position);
             if (this.animationStatus == 0) {
@@ -504,7 +502,7 @@
             switch (this.animationStatus) {
                 case 1:
                     this.position.x += dist;
-                    if (this.position.x > this.xmax) {
+                    if (this.position.x < this.xmax) {
                         this.position.x = this.xmax;
                         this.animationStatus = 2;
                         this.t1 = this.waitTime;
@@ -520,7 +518,7 @@
 
                 case 3:
                     this.position.x -= dist;
-                    if (this.position.x < this.xmin) {
+                    if (this.position.x > this.xmin) {
                         this.position.x = this.xmin;
                         this.animationStatus = 0
                     }
@@ -535,6 +533,8 @@
         cadre.amax = 0;
         cadre.duration = 2;
         cadre.onClick = function (intersection) {
+            document.getElementById("divTexture").style.display = "block";
+
             switch (this.animationStatus) {
                 case 0:
                     if (Math.pow(intersection.uv.x - 0.93, 2) + Math.pow(intersection.uv.y - 0.6, 2)
@@ -574,7 +574,7 @@
         porte.duration = 2;
         porte.waitTime = 5;
         porte.onClick = function (intersection) {
-            drawCanvas(intersection.uv.x, intersection.uv.y)
+            drawCanvas(intersection.uv.x, intersection.uv.y);
         }
         porte.updateAnimation = function (dt) {
             let angle = dt * (this.amax - this.amin) / this.duration;
