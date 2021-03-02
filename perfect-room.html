@@ -124,10 +124,10 @@
         <tr>
             <td class="title">Action:</td>
             <td><input class="info" id="action" type="text" value="0"/></td>
-        </tr>
-        <ul id="objects">
 
-        </ul>
+        </tr>
+        <tr><td><button type="button" id="okSound">Accepter Son</button></td></tr>
+        <ul id="objects"></ul>
     </table>
     <div id="divTexture">
         <canvas height="256" id="canvasTexture" width="256"></canvas>
@@ -156,7 +156,7 @@
 
     let canvaTexture, canvaContext, textureEcran, canvaMaterial;
 
-    let hauteurRegard = 70, isMoving = false;
+    let hauteurRegard = 70, isMoving = false, listener;
 
     function onClickEvent(event) {
         clickInfo.userHasClicked = true;
@@ -244,6 +244,10 @@
 
 
         console.log("spot", spotLight)
+
+        // create an AudioListener and add it to the camera
+        listener = new THREE.AudioListener();
+        camera.add( listener );
 
         clock.start();
         var loader = new ColladaLoader();
@@ -755,15 +759,27 @@
             if (this.gameOver) {
                 this.material[1].emissiveMap = this.images.play;
                 this.material[1].map = this.images.play;
+                this.sound.play();
 
             } else {
                 this.material[1].emissiveMap = this.images.pause;
                 this.material[1].map = this.images.pause;
+                this.sound.stop();
             }
             this.gameOver = !this.gameOver;
         }
 
         arcade.material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
+
+// create the PositionalAudio object (passing in the listener)
+        arcade.sound = new THREE.PositionalAudio( listener );
+
+// load a sound and set it as the PositionalAudio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( 'audio/space-invader.mp3', function( buffer ) {
+            arcade.sound.setBuffer( buffer );
+            arcade.sound.setRefDistance( 10 );
+        });
 
         let bouton1 = object.getObjectByName("bouton1");
         console.log("bouton1", bouton1)
@@ -784,6 +800,34 @@
         console.log("col", collision)
         collision.visible = false;
         obstacles.push(collision);
+
+        let tv = object.getObjectByName("tv");
+        console.log("tv", tv)
+        tv.material[1].emissiveMap =  tv.material[1].map;
+        tv.material[1].emissive =  new THREE.Color(1.0, 1.0, 1.0);
+        tv.onClick = function (){}
+        tv.updateAnimation = function (){}
+        tv.sound = new THREE.PositionalAudio( listener );
+        const audioLoader2 = new THREE.AudioLoader();
+        audioLoader2.load( 'audio/thief-simulator.mp3', function( buffer ) {
+            tv.sound.setBuffer( buffer );
+            tv.sound.setRefDistance( 10 );
+            tv.sound.setVolume(0.3)
+            tv.sound.loop = true
+
+            document.querySelector("#okSound").addEventListener("click", tv.sound.play())
+        });
+
+        let ecran1 = object.getObjectByName("Ecran1");
+        console.log("ecran1", ecran1);
+        ecran1.material[2].emissiveMap =  ecran1.material[2].map;
+        ecran1.material[2].emissive =  new THREE.Color(1.0, 1.0, 1.0);
+
+        let ecran2 = object.getObjectByName("Ecran002");
+        console.log("ecran2", ecran1);
+        ecran2.material[0].emissiveMap =  ecran2.material[0].map;
+        ecran2.material[0].emissive =  new THREE.Color(1.0, 1.0, 1.0);
+{}
     }
 
     function onProgress(data) {
