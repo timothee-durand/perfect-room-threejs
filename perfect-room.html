@@ -51,7 +51,7 @@
         }
 
         #divTexture {
-            display: block;
+            display: none;
             position: absolute;
             width: 256px;
             height: 256px;
@@ -321,7 +321,6 @@
         mat3.emissive = new THREE.Color(0.0, 1.0, 0.0);
         button3.state = false;
 
-
         //lumière cadre
         button.onClick = function (intersection) {
 
@@ -418,8 +417,8 @@
         let livre = object.getObjectByName("book_hp_006");
         animations.push(livre);
         livre.animationStatus = 0;
-        livre.ymin = 49 * 25.4;
-        livre.ymax = 64 * 25.4;
+        livre.xmin = 49 * 25.4;
+        livre.xmax = 55 * 25.4;
         livre.duration = 2;
         livre.waitTime = 5;
         livre.onClick = function (intersection) {
@@ -431,8 +430,8 @@
             let dist = dt * (this.xmax - this.xmin) / this.duration;
             switch (this.animationStatus) {
                 case 1:
-                    this.position.x -= dist;
-                    if (this.position.x < this.xmin) {
+                    this.position.x += dist;
+                    if (this.position.x > this.xmin) {
                         this.position.x = this.xmin;
                         this.animationStatus = 2;
                         this.t1 = this.waitTime;
@@ -447,9 +446,9 @@
                     break;
 
                 case 3:
-                    this.position.y += dist;
-                    if (this.position.y > this.xmax) {
-                        this.position.y = this.xmax;
+                    this.position.x -= dist;
+                    if (this.position.x > this.xmax) {
+                        this.position.x = this.xmax;
                         this.animationStatus = 0
                     }
                     break
@@ -633,6 +632,8 @@
         //
         //     obj.scale.set(0.5,0.5,0.5)
         // })
+
+        console.log("aracade",object.getObjectByName("arcade"))
 
 
     }
