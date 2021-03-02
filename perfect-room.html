@@ -453,7 +453,6 @@
                     }
                     break
             }
-
         };
 
         let cadre = object.getObjectByName("cadre");
@@ -634,7 +633,16 @@
         // })
 
         console.log("aracade",object.getObjectByName("arcade"))
+        let arcade = object.getObjectByName("arcade");
+        animations.push(arcade)
+        arcade.onclick = function (){}
+        arcade.updateAnimation = function (dt){}
+        arcade.images = {
+            pause : {...arcade.material[1].map},
 
+        }
+        arcade.material[1].emissiveMap = arcade.material[1].map;
+        arcade.material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
 
     }
 
