@@ -417,13 +417,14 @@
         let livre = object.getObjectByName("book_hp_006");
         animations.push(livre);
         livre.animationStatus = 0;
-        livre.xmin = 49 * 25.4;
-        livre.xmax = 55 * 25.4;
-        livre.duration = 2;
-        livre.waitTime = 5;
+        livre.xmin = 25.5;
+        livre.xmax = 500 ;
+        livre.duration = 1;
+        livre.waitTime = 2;
         livre.onClick = function (intersection) {
-            if (this.animationStatus === 0) {
-                this.animationStatus ++;
+            console.log("position livre",livre.position);
+            if (this.animationStatus == 0) {
+                this.animationStatus = 1;
             }
         }
         livre.updateAnimation = function (dt) {
@@ -431,8 +432,8 @@
             switch (this.animationStatus) {
                 case 1:
                     this.position.x += dist;
-                    if (this.position.x > this.xmin) {
-                        this.position.x = this.xmin;
+                    if (this.position.x > this.xmax) {
+                        this.position.x = this.xmax;
                         this.animationStatus = 2;
                         this.t1 = this.waitTime;
                     }
@@ -447,8 +448,8 @@
 
                 case 3:
                     this.position.x -= dist;
-                    if (this.position.x > this.xmax) {
-                        this.position.x = this.xmax;
+                    if (this.position.x < this.xmin) {
+                        this.position.x = this.xmin;
                         this.animationStatus = 0
                     }
                     break
