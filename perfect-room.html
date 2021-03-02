@@ -10,7 +10,7 @@
         body {
             margin: 0px;
             padding: 0px;
-            background-color: #777777;
+            background-color: #ffffff;
         }
 
         #canvas {
@@ -34,7 +34,6 @@
             border: 2px solid white;
             padding: 5px;
             font-size: 14pt;
-            font-family: times new roman;
             font-weight: bold;
             color: black;
             font-family: 'Montserrat', sans-serif;
@@ -46,7 +45,6 @@
             width: 260px;
             color: black;
             font-size: 14pt;
-            font-family: times new roman;
             font-weight: bold;
             padding: .5rem;
             border-radius: 2rem;
@@ -326,7 +324,7 @@
 
         //lumière cadre
         button.onClick = function (intersection) {
-            
+
             if (this.state) {
                 this.material = myMat;
                 this.rotation.x = THREE.Math.degToRad(-10.0);
@@ -347,10 +345,10 @@
         //lumière plafond 1
         let spot2 = object.getObjectByName("spot2");
         spot2.power=0.9*Math.PI;
-        spot2.visible = true; 
+        spot2.visible = true;
 
         button2.onClick = function (intersection) {
-            
+
 
             if (this.state) {
                 this.material = myMat;
@@ -372,11 +370,11 @@
         //lumière plafond 2
         let spot3 = object.getObjectByName("spot3");
         spot3.power=0.9*Math.PI;
-        spot3.visible = true; 
+        spot3.visible = true;
 
 
         button3.onClick = function (intersection) {
-            
+
             if (this.state) {
                 this.material = myMat;
                 this.rotation.x = THREE.Math.degToRad(-10.0);
@@ -425,15 +423,17 @@
         livre.duration = 2;
         livre.waitTime = 5;
         livre.onClick = function (intersection) {
-            console.log("click sur le livre");
+            if (this.animationStatus === 0) {
+                this.animationStatus ++;
+            }
         }
         livre.updateAnimation = function (dt) {
-            let dist = dt * (this.ymax - this.ymin) / this.duration;
+            let dist = dt * (this.xmax - this.xmin) / this.duration;
             switch (this.animationStatus) {
                 case 1:
-                    this.position.y -= dist;
-                    if (this.position.y < this.ymin) {
-                        this.position.y = this.ymin;
+                    this.position.x -= dist;
+                    if (this.position.x < this.xmin) {
+                        this.position.x = this.xmin;
                         this.animationStatus = 2;
                         this.t1 = this.waitTime;
                     }
@@ -448,8 +448,8 @@
 
                 case 3:
                     this.position.y += dist;
-                    if (this.position.y > this.ymax) {
-                        this.position.y = this.ymax;
+                    if (this.position.y > this.xmax) {
+                        this.position.y = this.xmax;
                         this.animationStatus = 0
                     }
                     break
