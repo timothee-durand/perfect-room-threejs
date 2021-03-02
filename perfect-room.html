@@ -4,9 +4,10 @@
     <title>Perfect Room</title>
     <meta charset="UTF-8">
     <link href="images/icon.png" rel="icon" type="image/png"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
         body {
             margin: 0px;
             padding: 0px;
@@ -69,25 +70,25 @@
             background: white;
         }
 
-        h1,h4{
+        h1, h4 {
             font-family: 'Oswald', sans-serif;
             color: #E07D32;
         }
 
-        .title{
+        .title {
             color: #9382E0;
             margin-top: 1rem;
         }
 
-        table{
+        table {
             margin-top: 1rem;
         }
 
-        li{
+        li {
             list-style: none;
         }
 
-        span{
+        span {
             color: #E07D32;
             font-weight: bolder;
         }
@@ -129,7 +130,9 @@
         </ul>
     </table>
     <div id="divTexture">
-        <canvas height="256" id="canvasTexture" width="256"/>
+        <canvas height="256" id="canvasTexture" width="256"></canvas>
+        <img alt="" id="textureGameOver" src="models/textures/game_over.jpg">
+        <img alt="" id="textureGamePlay" src="models/textures/game_play.jpg">
     </div>
 </div>
 
@@ -219,13 +222,40 @@
         scene = new THREE.Scene();
         scene.add(camera);
 
+        //ajout lumière caméra
+
+        const spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position.set( 0, 0, 0 );
+        spotLight.angle = 0.4;
+        spotLight.intensity = 0.4;
+        spotLight.penumbra = 0.3;
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.shadow.camera.near = 500;
+        spotLight.shadow.camera.far = 4000;
+        spotLight.shadow.camera.fov = 30;
+
+        spotLight.color = new THREE.Color(1,0.6,0);
+        camera.add( spotLight );
+
+        window.target = new THREE.Object3D();
+        camera.add(target)
+        target.position.set(0, -1, -10);
+        spotLight.target = target;
+
+
+
+
+        console.log("spot", spotLight)
+
         clock.start();
         var loader = new ColladaLoader();
         loader.load('./models/room_durand_gaultier_4.7.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
-        var ambientLight = new THREE.AmbientLight(0x202020);
-        scene.add(ambientLight);
+//         var ambientLight = new THREE.AmbientLight(0x202020);
+//         scene.add(ambientLight);
 
         canvaTexture = document.getElementById("canvasTexture");
         canvaContext = canvaTexture.getContext("2d");
@@ -292,7 +322,7 @@
         document.getElementById('action').value = "Load completed after " + dt.toFixed(2) + " s.";
 
         let light1 = object.getObjectByName('spot1');
-        light1.power=0.6*Math.PI;
+        light1.power = 0.6 * Math.PI;
         light1.penumbra = 43.0 / 60.0;
         light1.distance = 170.0 / 2.54;
         light1.target = object.getObjectByName('spot1.Target');
@@ -343,8 +373,8 @@
 
         //lumière plafond 1
         let spot2 = object.getObjectByName("spot2");
-        spot2.power=0.9*Math.PI;
-        spot2.visible = true;
+        spot2.power = 0.9 * Math.PI;
+        spot2.visible = false;
 
         button2.onClick = function (intersection) {
 
@@ -368,8 +398,8 @@
 
         //lumière plafond 2
         let spot3 = object.getObjectByName("spot3");
-        spot3.power=0.9*Math.PI;
-        spot3.visible = true;
+        spot3.power = 0.9 * Math.PI;
+        spot3.visible = false;
 
 
         button3.onClick = function (intersection) {
@@ -393,11 +423,11 @@
 
         //lumière lampe bureau
         let spot4 = object.getObjectByName("spot_lampe_bureau");
-        spot4.power=0.5*Math.PI;
+        spot4.power = 0.5 * Math.PI;
         spot4.penumbra = 40.0 / 80.0;
         spot4.distance = 100.0 / 2.54;
         spot4.target = object.getObjectByName('spot_lampe_bureau.Target');
-        spot4.visible = true; //éteint la lumière
+        spot4.visible = false; //éteint la lumière
 
         // let lampe = object.getObjectByName("lampe_bureau");
         // lampe.onClick = function (intersection) {
@@ -633,16 +663,38 @@
         //     obj.scale.set(0.5,0.5,0.5)
         // })
 
-        console.log("aracade",object.getObjectByName("arcade"))
+        function changeArcadeScreen(arcade) {
+            arcade.switchMat();
+        }
+
+        console.log("aracade", object.getObjectByName("arcade"))
         let arcade = object.getObjectByName("arcade");
         animations.push(arcade)
-        arcade.onclick = function (){}
-        arcade.updateAnimation = function (dt){}
+        arcade.onClick = function () {
+            changeArcadeScreen(this);
+        }
+        arcade.updateAnimation = function (dt) {
+        }
         arcade.images = {
-            pause : {...arcade.material[1].map},
+            pause: new THREE.TextureLoader().load('models/textures/game_over.jpg'),
+            play: new THREE.TextureLoader().load('models/textures/game_play.jpg'),
 
         }
         arcade.material[1].emissiveMap = arcade.material[1].map;
+        arcade.gameOver = true;
+        arcade.switchMat = function () {
+            if (this.gameOver) {
+                this.material[1].emissiveMap = this.images.play;
+                this.material[1].map = this.images.play;
+
+            } else {
+                this.material[1].emissiveMap = this.images.pause;
+                this.material[1].map = this.images.pause;
+            }
+            this.gameOver = !this.gameOver;
+        }
+
+
         arcade.material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
 
     }
