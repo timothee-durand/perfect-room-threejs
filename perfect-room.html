@@ -70,7 +70,7 @@
             background: white;
         }
 
-        h1, h4 {
+        h1, h4, h2 {
             font-family: 'Oswald', sans-serif;
             color: #E07D32;
         }
@@ -103,8 +103,62 @@
             -moz-border-radius: 10px;
             border-radius: 10px;
             margin-top: 5px;
+            cursor: pointer;
         }
 
+        .pop-up-back {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(50, 50, 50, 0.6);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .pop-up {
+            background-color: #fff;
+            border-radius:20px;
+            width: 50%;
+            max-width: 700px;
+            padding: 20px;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 6px;
+            background: none;
+            box-shadow: none;
+            font-size: 20px;
+        }
+
+        .pop-up h2 {
+            margin:0;
+        }
+
+        .play-button{
+            background-color: #E07D32;
+            color: #fff;
+            padding: 10px 20px;
+            display: block;
+            margin: auto;
+            width: 50%;
+        }
+
+        ul {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -115,15 +169,15 @@
         <tr>
             <h1>Perfect Room</h1>
             <h4>Timothée Durand & Cécile Gaultier MMI2</h4>
-            <td class="title">Click position:</td>
-            <td><input class="info" id="positions" type="text" value="(0;0)"/></td>
+<!--            <td class="title">Click position:</td>-->
+<!--            <td><input class="info" id="positions" type="text" value="(0;0)"/></td>-->
         </tr>
+<!--        <tr>-->
+<!--            <td class="title">Clicked object:</td>-->
+<!--            <td><input class="info" id="obj_name" type="text"/></td>-->
+<!--        </tr>-->
+        <tr><td class="title">Touches :</td></tr>
         <tr>
-            <td class="title">Clicked object:</td>
-            <td><input class="info" id="obj_name" type="text"/></td>
-        </tr>
-        <tr>
-            <td class="title">Touches :</td>
             <td>
                 <ul>
                     <li><span>Espace :</span> Bloquer / Débloquer la caméra</li>
@@ -133,7 +187,7 @@
             </td>
         </tr>
         <tr>
-            <td class="title">Action:</td>
+<!--            <td class="title">Action:</td>-->
             <td><input class="info" id="action" type="text" value="0"/></td>
 
         </tr>
@@ -141,7 +195,12 @@
             <td>
                 <button id="muteSound" type="button">Activer le son</button>
             </td>
-
+        </tr>
+        <tr>
+            <td>
+                <button id="clueButton" type="button" class="hidden" onclick="document.querySelector('.clue').classList.remove('hidden')">Avoir un indice</button>
+                <p class="clue hidden">Avez vous cliqué sur le bouton vert ?</p>
+            </td>
         </tr>
         <ul id="objects"></ul>
     </table>
@@ -149,7 +208,16 @@
         <canvas height="256" id="canvasTexture" width="256"></canvas>
     </div>
 </div>
-
+<div class="pop-up-back">
+    <div class="pop-up">
+        <button type="button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')" class="close-button">x</button>
+        <h2>The Perfect Room</h2>
+        <p>Vous êtes un voleur. Vous vous apprêtez à pénétrer chez votre cible de ce soir. Votre but : découvrir ce qui est caché dans ce coffre et le voler !</p>
+        <p>Avant de venir vous vous êtes renseigné : la personne qui vit ici a pour habitude de ne pas chercher ses codes bien loin. Alors soyez à l'affût d'indices !</p>
+        <p>Pour commencer à jouer, une fois cette fenêtre fermée, appuyez sur la touche espace !</p>
+        <button type="button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')"  class="play-button">Jouer</button>
+    </div>
+</div>
 <script type="module">
     import * as THREE from './three.js-dev/build/three.module.js';
     //import { OrbitControls } from './three.js-dev/examples/jsm/controls/OrbitControls.js';
@@ -297,6 +365,10 @@
             }
 
         })
+
+        setTimeout(function (){
+            document.querySelector("#clueButton").classList.remove("hidden");
+        }, 30000)
     }
 
 
@@ -849,8 +921,6 @@
             tv.sound.setRefDistance(10);
             tv.sound.setVolume(0.3)
             tv.sound.loop = true
-
-            document.querySelector("#okSound").addEventListener("click", tv.sound.play())
         });
 
         let ecran1 = object.getObjectByName("Ecran1");
