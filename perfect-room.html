@@ -236,7 +236,7 @@
     var clock = new THREE.Clock();
     var SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_LEFT, SCREEN_TOP;
     const raycaster = new THREE.Raycaster();
-    var currentCode = "", goodCode = "0 7 3 0 # ";
+    var currentCode = "", goodCode = "0 0 7 3 0 ";
 
     let canvaTexture, canvaContext, textureEcran, canvaMaterial;
 
@@ -313,7 +313,7 @@
         spotLight.intensity = 0.3;
         spotLight.penumbra = 0.3;
 
-        spotLight.color = new THREE.Color(1, 1, 1);
+        spotLight.color = new THREE.Color(1, .7, .2);
         camera.add(spotLight);
 
         window.target = new THREE.Object3D();
@@ -684,7 +684,6 @@
                         <= Math.pow(0.03, 2)
 
                     ) {
-                        document.getElementById("divTexture").style.display = "block";
                         this.animationStatus = 1;}
                     break;
                 case 2 :
@@ -794,7 +793,10 @@
         poignee.onClick = function (intersection) {
             console.log(this.animationStatus)
 
-            if (!goodCode) return;
+            if (currentCode.split(' ').join('') !== goodCode.split(' ').join('')) return;
+            console.log("current Code", currentCode);
+            console.log("goodCode Code", goodCode);
+
 
             switch (this.animationStatus) {
                 case 0:
