@@ -152,7 +152,7 @@
     var clock = new THREE.Clock();
     var SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_LEFT, SCREEN_TOP;
     const raycaster = new THREE.Raycaster();
-    var currentCode = "", goodCode = "0 7 3 0 # ", codeBon = false;
+    var currentCode = "", goodCode = "0 7 3 0 # ";
 
     let canvaTexture, canvaContext, textureEcran, canvaMaterial;
 
@@ -205,8 +205,9 @@
 
 // création d'une caméra perspective(angle d'ouverture, rapport largeur/hauteur, near, far)
         camera = new THREE.PerspectiveCamera(60, w / h, 10, 5000);
-        camera.position.set(-10, hauteurRegard, 70); // placer dans le repère principal avec y vers le hauteur
+        camera.position.set(-30, hauteurRegard, 75); // placer dans le repère principal avec y vers le hauteur
         camera.lookAt(new THREE.Vector3(1, 50, 0));
+        console.log("XAMERA3",camera.position);
 
         controls = new FirstPersonControls(camera);
         controls.lookSpeed = 0.15;
@@ -251,7 +252,7 @@
 
         clock.start();
         var loader = new ColladaLoader();
-        loader.load('./models/room_durand_gaultier_5.dae', onLoaded, onProgress, onError);
+        loader.load('./models/room_durand_gaultier_5.2.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
 //         var ambientLight = new THREE.AmbientLight(0x202020);
@@ -564,13 +565,15 @@
         cadre.amax = 0;
         cadre.duration = 2;
         cadre.onClick = function (intersection) {
-            document.getElementById("divTexture").style.display = "block";
 
             switch (this.animationStatus) {
                 case 0:
                     if (Math.pow(intersection.uv.x - 0.93, 2) + Math.pow(intersection.uv.y - 0.6, 2)
                         <= Math.pow(0.03, 2)
-                    ) this.animationStatus = 1;
+
+                    ) {
+                        document.getElementById("divTexture").style.display = "block";
+                        this.animationStatus = 1;}
                     break;
                 case 2 :
                     this.animationStatus = 3;
@@ -679,7 +682,7 @@
         poignee.onClick = function (intersection) {
             console.log(this.animationStatus)
 
-            if (!codeBon) return;
+            if (!goodCode) return;
 
             switch (this.animationStatus) {
                 case 0:
@@ -861,60 +864,89 @@
 
     }
 
-    function updateCode(x, y) {
-
-        let caracCode = "1";
-        if (x * 256 > 12 && x * 256 < 237 && y * 256 > 6 && y * 256 < 206) {
-            let xCode = Math.floor((x * 256 - 12) / 75) + 1;
-            let yCode = Math.floor(((1 - y) * 256 - 6) / 50) - 1;
-            if (yCode === 0 || yCode === 1 || yCode === 2) {
+    function updateCode(x,y) {
+    //but : modifier currentCode
+    let xcanvas = x*256;
+    let ycanvas = y*256;
 
 
-                caracCode = xCode + (yCode * 3);
-            }
+    let col = parseInt((xcanvas-12)/75);
+    let lig = parseInt((ycanvas-6)/50);
 
-            if (yCode === 3) {
+    //console.log("col :",col);
+    //console.log("lig :",lig);
 
-                switch (xCode) {
-                    case 1 :
-                        currentCode = currentCode.slice(0, currentCode.length - 3);
-                        break;
-                    case 2 :
-                        caracCode = "0";
-                        break;
-                    case 3 :
-                        if (getNumberCarac(currentCode) >= 4) {
-                            caracCode = "#";
-                        }
-                        break;
-                }
-            }
-        }
+    let codeCase= col + lig*3;
 
-        currentCode = currentCode + caracCode;
+    //console.log("code Case :",codeCase);
 
-        if (currentCode.slice(1, currentCode.length) === goodCode) {
-            codeBon = true;
+    let res = currentCode.split(" ");
 
-        } else {
-            codeBon = false;
 
-        }
+    //let res = ["Banana", "Orange", "Apple", "Mango"];
 
+
+    switch (codeCase){
+        case 0:
+            //currentCode = '';
+            res = res.slice(0,res.length -2);
+            currentCode = res.join(" ") + " ";
+            break;
+
+        case 1:
+            currentCode = currentCode + "0 ";
+            break;
+
+        case 2:
+            currentCode = currentCode + "# ";
+            break;
+
+        case 3:
+            currentCode = currentCode + "7 ";
+            break;
+
+        case 4:
+            currentCode = currentCode + "8 ";
+            break;
+
+        case 5:
+            currentCode = currentCode + "9 ";
+            break;
+
+        case 6:
+            currentCode = currentCode + "4 ";
+            break;
+
+        case 7:
+            currentCode = currentCode + "5 ";
+            break;
+
+        case 8:
+            currentCode = currentCode + "6 ";
+            break;
+
+        case 9:
+            currentCode = currentCode + "1 ";
+            break;
+
+        case 10:
+            currentCode = currentCode + "2 ";
+            break;
+
+        case 11:
+            currentCode = currentCode + "3 ";
+            break;
 
     }
 
-    function getNumberCarac(code) {
-        let nReturn = 0;
-        for (let codeC in code.split(" ")) {
-            if (codeC !== "") {
-                //si c'est un caractère
-                nReturn++;
-            }
-        }
-        return nReturn;
-    }
+    currentCode = currentCode.slice(0,10);
 
+    console.log("code : ",currentCode);
+    console.log("res : ",res);
+    console.log("code longueur : ",currentCode.length);
+
+
+}
     /******************************************************************************/
     /* PROGRAMME PRINCIPAL ********************************************************/
     start();
