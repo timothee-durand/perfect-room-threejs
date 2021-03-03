@@ -70,7 +70,7 @@
             background: white;
         }
 
-        h1, h4 {
+        h1, h4, h2 {
             font-family: 'Oswald', sans-serif;
             color: #E07D32;
         }
@@ -93,7 +93,72 @@
             font-weight: bolder;
         }
 
+        button {
+            outline: none;
+            border: none;
+            background-color: #fff;
+            box-shadow: 3px 3px 3px 0 #a9a9a9;
+            padding: 5px 10px;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
 
+        .pop-up-back {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(50, 50, 50, 0.6);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .pop-up {
+            background-color: #fff;
+            border-radius:20px;
+            width: 50%;
+            max-width: 700px;
+            padding: 20px;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 6px;
+            background: none;
+            box-shadow: none;
+            font-size: 20px;
+        }
+
+        .pop-up h2 {
+            margin:0;
+        }
+
+        .play-button{
+            background-color: #E07D32;
+            color: #fff;
+            padding: 10px 20px;
+            display: block;
+            margin: auto;
+            width: 50%;
+        }
+
+        ul {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -104,15 +169,15 @@
         <tr>
             <h1>Perfect Room</h1>
             <h4>Timothée Durand & Cécile Gaultier MMI2</h4>
-            <td class="title">Click position:</td>
-            <td><input class="info" id="positions" type="text" value="(0;0)"/></td>
+<!--            <td class="title">Click position:</td>-->
+<!--            <td><input class="info" id="positions" type="text" value="(0;0)"/></td>-->
         </tr>
+<!--        <tr>-->
+<!--            <td class="title">Clicked object:</td>-->
+<!--            <td><input class="info" id="obj_name" type="text"/></td>-->
+<!--        </tr>-->
+        <tr><td class="title">Touches :</td></tr>
         <tr>
-            <td class="title">Clicked object:</td>
-            <td><input class="info" id="obj_name" type="text"/></td>
-        </tr>
-        <tr>
-            <td class="title">Touches :</td>
             <td>
                 <ul>
                     <li><span>Espace :</span> Bloquer / Débloquer la caméra</li>
@@ -122,18 +187,37 @@
             </td>
         </tr>
         <tr>
-            <td class="title">Action:</td>
+<!--            <td class="title">Action:</td>-->
             <td><input class="info" id="action" type="text" value="0"/></td>
 
         </tr>
-        <tr><td><button type="button" id="okSound">Accepter Son</button></td></tr>
+        <tr>
+            <td>
+                <button id="muteSound" type="button">Activer le son</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="clueButton" type="button" class="hidden" onclick="document.querySelector('.clue').classList.remove('hidden')">Avoir un indice</button>
+                <p class="clue hidden">Avez vous cliqué sur le bouton vert ?</p>
+            </td>
+        </tr>
         <ul id="objects"></ul>
     </table>
     <div id="divTexture">
         <canvas height="256" id="canvasTexture" width="256"></canvas>
     </div>
 </div>
-
+<div class="pop-up-back">
+    <div class="pop-up">
+        <button type="button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')" class="close-button">x</button>
+        <h2>The Perfect Room</h2>
+        <p>Vous êtes un voleur. Vous vous apprêtez à pénétrer chez votre cible de ce soir. Votre but : découvrir ce qui est caché dans ce coffre et le voler !</p>
+        <p>Avant de venir vous vous êtes renseigné : la personne qui vit ici a pour habitude de ne pas chercher ses codes bien loin. Alors soyez à l'affût d'indices !</p>
+        <p>Pour commencer à jouer, une fois cette fenêtre fermée, appuyez sur la touche espace !</p>
+        <button type="button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')"  class="play-button">Jouer</button>
+    </div>
+</div>
 <script type="module">
     import * as THREE from './three.js-dev/build/three.module.js';
     //import { OrbitControls } from './three.js-dev/examples/jsm/controls/OrbitControls.js';
@@ -156,7 +240,7 @@
 
     let canvaTexture, canvaContext, textureEcran, canvaMaterial;
 
-    let hauteurRegard = 70, isMoving = false, listener;
+    let hauteurRegard = 60, isMoving = false, listener, soundOn = false, tv;
 
     function onClickEvent(event) {
         clickInfo.userHasClicked = true;
@@ -228,12 +312,6 @@
         spotLight.angle = 0.4;
         spotLight.intensity = 0.3;
         spotLight.penumbra = 0.3;
-        spotLight.castShadow = true;
-        spotLight.shadow.mapSize.width = 1024;
-        spotLight.shadow.mapSize.height = 1024;
-        spotLight.shadow.camera.near = 500;
-        spotLight.shadow.camera.far = 4000;
-        spotLight.shadow.camera.fov = 30;
 
         spotLight.color = new THREE.Color(1, 1, 1);
         camera.add(spotLight);
@@ -248,7 +326,7 @@
 
         // create an AudioListener and add it to the camera
         listener = new THREE.AudioListener();
-        camera.add( listener );
+        camera.add(listener);
 
         clock.start();
         var loader = new ColladaLoader();
@@ -264,6 +342,28 @@
         textureEcran.src = "./models/textures/clavier_coffre.png";
 
         console.log(canvaTexture, canvaContext, textureEcran)
+
+        let boutonMute = document.querySelector("#muteSound");
+        boutonMute.addEventListener("click", function () {
+            if(tv) {
+                if(!tv.sound.isPlaying) {
+                    tv.sound.play();
+                }
+                if (soundOn) {
+                    listener.setMasterVolume(0)
+                    boutonMute.innerHTML = "Activer le son"
+                } else {
+                    listener.setMasterVolume(1)
+                    boutonMute.innerHTML = "Couper le son"
+                }
+                soundOn = !soundOn;
+            }
+
+        })
+
+        setTimeout(function (){
+            document.querySelector("#clueButton").classList.remove("hidden");
+        }, 30000)
     }
 
 
@@ -293,7 +393,6 @@
                 })
 
                 if (!onFloor) {
-                    console.log("HEYYY ou tu vas toi la bas")
                     camera.position.set(oldPosition.x, oldPosition.y, oldPosition.z);
                 }
             }
@@ -309,13 +408,13 @@
             let intersections = raycaster.intersectObjects(scene.children, true);
             let obj = null;
 
-            document.getElementById("positions").value = `(${clickInfo.mouse.x.toFixed(2)},${clickInfo.mouse.y.toFixed(2)})`;
+            //document.getElementById("positions").value = `(${clickInfo.mouse.x.toFixed(2)},${clickInfo.mouse.y.toFixed(2)})`;
             if (intersections.length > 0) {
                 obj = intersections[0].object;
                 while (obj != null && obj.name === "") {
                     obj = obj.parent;
                 }
-                document.getElementById("obj_name").value = `${obj.name} uv=(${intersections[0].uv.x.toFixed(2)},${intersections[0].uv.y.toFixed(2)})`;
+               // document.getElementById("obj_name").value = `${obj.name} uv=(${intersections[0].uv.x.toFixed(2)},${intersections[0].uv.y.toFixed(2)})`;
             }
 
             if (obj) {
@@ -356,7 +455,9 @@
         light1.penumbra = 43.0 / 60.0;
         light1.distance = 170.0 / 2.54;
         light1.target = object.getObjectByName('spot1.Target');
-        light1.visible = false; //éteint la lumière
+        light1.visible = true; //éteint la lumière
+
+
 
         let button = object.getObjectByName('button1');
         button.rotation.x = THREE.Math.degToRad(10.0);
@@ -405,6 +506,12 @@
         let spot2 = object.getObjectByName("spot2");
         spot2.power = 0.9 * Math.PI;
         spot2.visible = false;
+        spot2.castShadow = true;
+        spot2.shadow.mapSize.width = 1024;
+        spot2.shadow.mapSize.height = 1024;
+        spot2.shadow.camera.near = 500;
+        spot2.shadow.camera.far = 4000;
+        spot2.shadow.camera.fov = 30;
 
         button2.onClick = function (intersection) {
 
@@ -429,8 +536,13 @@
         //lumière plafond 2
         let spot3 = object.getObjectByName("spot3");
         spot3.power = 0.9 * Math.PI;
-        spot3.visible = false;
-
+        spot3.visible = true;
+        spot3.castShadow = true;
+        spot3.shadow.mapSize.width = 1024;
+        spot3.shadow.mapSize.height = 1024;
+        spot3.shadow.camera.near = 500;
+        spot3.shadow.camera.far = 4000;
+        spot3.shadow.camera.fov = 30;
 
         button3.onClick = function (intersection) {
 
@@ -524,7 +636,7 @@
         tiroir.duration = 1;
         tiroir.waitTime = 4;
         tiroir.onClick = function (intersection) {
-            console.log("position tiroir",tiroir.position);
+            console.log("position tiroir", tiroir.position);
             if (this.animationStatus == 0) {
                 this.animationStatus = 1;
             }
@@ -775,13 +887,13 @@
         arcade.material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
 
 // create the PositionalAudio object (passing in the listener)
-        arcade.sound = new THREE.PositionalAudio( listener );
+        arcade.sound = new THREE.PositionalAudio(listener);
 
 // load a sound and set it as the PositionalAudio object's buffer
         const audioLoader = new THREE.AudioLoader();
-        audioLoader.load( 'audio/space-invader.mp3', function( buffer ) {
-            arcade.sound.setBuffer( buffer );
-            arcade.sound.setRefDistance( 10 );
+        audioLoader.load('audio/space-invader.mp3', function (buffer) {
+            arcade.sound.setBuffer(buffer);
+            arcade.sound.setRefDistance(10);
         });
 
         let bouton1 = object.getObjectByName("bouton1");
@@ -804,33 +916,33 @@
         collision.visible = false;
         obstacles.push(collision);
 
-        let tv = object.getObjectByName("tv");
+        tv = object.getObjectByName("tv");
         console.log("tv", tv)
-        tv.material[1].emissiveMap =  tv.material[1].map;
-        tv.material[1].emissive =  new THREE.Color(1.0, 1.0, 1.0);
-        tv.onClick = function (){}
-        tv.updateAnimation = function (){}
-        tv.sound = new THREE.PositionalAudio( listener );
+        tv.material[1].emissiveMap = tv.material[1].map;
+        tv.material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
+        tv.onClick = function () {
+        }
+        tv.updateAnimation = function () {
+        }
+        tv.sound = new THREE.PositionalAudio(listener);
         const audioLoader2 = new THREE.AudioLoader();
-        audioLoader2.load( 'audio/thief-simulator.mp3', function( buffer ) {
-            tv.sound.setBuffer( buffer );
-            tv.sound.setRefDistance( 10 );
+        audioLoader2.load('audio/thief-simulator.mp3', function (buffer) {
+            tv.sound.setBuffer(buffer);
+            tv.sound.setRefDistance(10);
             tv.sound.setVolume(0.3)
             tv.sound.loop = true
-
-            document.querySelector("#okSound").addEventListener("click", tv.sound.play())
         });
 
         let ecran1 = object.getObjectByName("Ecran1");
         console.log("ecran1", ecran1);
-        ecran1.material[2].emissiveMap =  ecran1.material[2].map;
-        ecran1.material[2].emissive =  new THREE.Color(1.0, 1.0, 1.0);
+        ecran1.material[2].emissiveMap = ecran1.material[2].map;
+        ecran1.material[2].emissive = new THREE.Color(1.0, 1.0, 1.0);
 
         let ecran2 = object.getObjectByName("Ecran002");
         console.log("ecran2", ecran1);
-        ecran2.material[0].emissiveMap =  ecran2.material[0].map;
-        ecran2.material[0].emissive =  new THREE.Color(1.0, 1.0, 1.0);
-{}
+        ecran2.material[0].emissiveMap = ecran2.material[0].map;
+        ecran2.material[0].emissive = new THREE.Color(1.0, 1.0, 1.0);
+
     }
 
     function onProgress(data) {
