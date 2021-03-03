@@ -546,7 +546,7 @@
         //lumière plafond 2
         let spot3 = object.getObjectByName("spot3");
         spot3.power = 0.9 * Math.PI;
-        spot3.visible = true;
+        spot3.visible = false;
         spot3.castShadow = true;
         spot3.shadow.mapSize.width = 1024;
         spot3.shadow.mapSize.height = 1024;
@@ -603,6 +603,10 @@
         livre.xmax = 500;
         livre.duration = 1;
         livre.waitTime = 4;
+        console.log("livre", livre)
+        livre.material[0].emissive = new THREE.Color (0.4, 0.4, 0.4);
+        livre.material[0].emissiveMap = livre.material[0].map;
+
         livre.onClick = function (intersection) {
             console.log("position livre", livre.position);
             if (this.animationStatus == 0) {
@@ -956,6 +960,8 @@
 
         let teteVoldi = object.getObjectByName("head");
         teteVoldi.material[3].emissive = new THREE.Color(1.0, 1.0, 1.0);
+
+
     }
 
     function onProgress(data) {
