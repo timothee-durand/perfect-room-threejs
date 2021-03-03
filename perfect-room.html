@@ -124,7 +124,7 @@
 
         .pop-up {
             background-color: #fff;
-            border-radius:20px;
+            border-radius: 20px;
             width: 50%;
             max-width: 700px;
             padding: 20px;
@@ -144,10 +144,10 @@
         }
 
         .pop-up h2 {
-            margin:0;
+            margin: 0;
         }
 
-        .play-button{
+        .play-button {
             background-color: #E07D32;
             color: #fff;
             padding: 10px 20px;
@@ -169,14 +169,16 @@
         <tr>
             <h1>Perfect Room</h1>
             <h4>Timothée Durand & Cécile Gaultier MMI2</h4>
-<!--            <td class="title">Click position:</td>-->
-<!--            <td><input class="info" id="positions" type="text" value="(0;0)"/></td>-->
+            <!--            <td class="title">Click position:</td>-->
+            <!--            <td><input class="info" id="positions" type="text" value="(0;0)"/></td>-->
         </tr>
-<!--        <tr>-->
-<!--            <td class="title">Clicked object:</td>-->
-<!--            <td><input class="info" id="obj_name" type="text"/></td>-->
-<!--        </tr>-->
-        <tr><td class="title">Touches :</td></tr>
+        <!--        <tr>-->
+        <!--            <td class="title">Clicked object:</td>-->
+        <!--            <td><input class="info" id="obj_name" type="text"/></td>-->
+        <!--        </tr>-->
+        <tr>
+            <td class="title">Touches :</td>
+        </tr>
         <tr>
             <td>
                 <ul>
@@ -187,7 +189,7 @@
             </td>
         </tr>
         <tr>
-<!--            <td class="title">Action:</td>-->
+            <!--            <td class="title">Action:</td>-->
             <td><input class="info" id="action" type="text" value="0"/></td>
 
         </tr>
@@ -198,7 +200,9 @@
         </tr>
         <tr>
             <td>
-                <button id="clueButton" type="button" class="hidden" onclick="document.querySelector('.clue').classList.remove('hidden')">Avoir un indice</button>
+                <button class="hidden" id="clueButton" onclick="document.querySelector('.clue').classList.remove('hidden')"
+                        type="button">Avoir un indice
+                </button>
                 <p class="clue hidden">Avez vous cliqué sur le bouton vert ?</p>
             </td>
         </tr>
@@ -210,12 +214,19 @@
 </div>
 <div class="pop-up-back">
     <div class="pop-up">
-        <button type="button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')" class="close-button">x</button>
+        <button class="close-button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')"
+                type="button">x
+        </button>
         <h2>The Perfect Room</h2>
-        <p>Vous êtes un voleur. Vous vous apprêtez à pénétrer chez votre cible de ce soir. Votre but : découvrir ce qui est caché dans ce coffre et le voler !</p>
-        <p>Avant de venir vous vous êtes renseigné : la personne qui vit ici a pour habitude de ne pas chercher ses codes bien loin. Alors soyez à l'affût d'indices !</p>
-        <p>Pour commencer à jouer, une fois cette fenêtre fermée, appuyez sur la touche espace ! SI vous êtes perdus dans 30 secondes vous pourrez débloquer un indice.</p>
-        <button type="button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')"  class="play-button">Jouer</button>
+        <p>Vous êtes un voleur. Vous vous apprêtez à pénétrer chez votre cible de ce soir. Votre but : découvrir ce qui
+            est caché dans ce coffre et le voler !</p>
+        <p>Avant de venir vous vous êtes renseigné : la personne qui vit ici a pour habitude de ne pas chercher ses
+            codes bien loin. Alors soyez à l'affût d'indices !</p>
+        <p>Pour commencer à jouer, une fois cette fenêtre fermée, appuyez sur la touche espace ! SI vous êtes perdus
+            dans 30 secondes vous pourrez débloquer un indice.</p>
+        <button class="play-button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')"
+                type="button">Jouer
+        </button>
     </div>
 </div>
 <script type="module">
@@ -291,7 +302,7 @@
         camera = new THREE.PerspectiveCamera(60, w / h, 10, 5000);
         camera.position.set(-30, hauteurRegard, 75); // placer dans le repère principal avec y vers le hauteur
         camera.lookAt(new THREE.Vector3(1, 50, 0));
-        console.log("XAMERA3",camera.position);
+        console.log("XAMERA3", camera.position);
 
         controls = new FirstPersonControls(camera);
         controls.lookSpeed = 0.15;
@@ -345,8 +356,8 @@
 
         let boutonMute = document.querySelector("#muteSound");
         boutonMute.addEventListener("click", function () {
-            if(tv) {
-                if(!tv.sound.isPlaying) {
+            if (tv) {
+                if (!tv.sound.isPlaying) {
                     tv.sound.play();
                 }
                 if (soundOn) {
@@ -361,7 +372,7 @@
 
         })
 
-        setTimeout(function (){
+        setTimeout(function () {
             document.querySelector("#clueButton").classList.remove("hidden");
         }, 30000)
     }
@@ -414,7 +425,7 @@
                 while (obj != null && obj.name === "") {
                     obj = obj.parent;
                 }
-               // document.getElementById("obj_name").value = `${obj.name} uv=(${intersections[0].uv.x.toFixed(2)},${intersections[0].uv.y.toFixed(2)})`;
+                // document.getElementById("obj_name").value = `${obj.name} uv=(${intersections[0].uv.x.toFixed(2)},${intersections[0].uv.y.toFixed(2)})`;
             }
 
             if (obj) {
@@ -456,7 +467,6 @@
         light1.distance = 170.0 / 2.54;
         light1.target = object.getObjectByName('spot1.Target');
         light1.visible = true; //éteint la lumière
-
 
 
         let button = object.getObjectByName('button1');
@@ -536,7 +546,7 @@
         //lumière plafond 2
         let spot3 = object.getObjectByName("spot3");
         spot3.power = 0.9 * Math.PI;
-        spot3.visible = true;
+        spot3.visible = false;
         spot3.castShadow = true;
         spot3.shadow.mapSize.width = 1024;
         spot3.shadow.mapSize.height = 1024;
@@ -593,6 +603,10 @@
         livre.xmax = 500;
         livre.duration = 1;
         livre.waitTime = 4;
+        console.log("livre", livre)
+        livre.material[0].emissive = new THREE.Color (0.4, 0.4, 0.4);
+        livre.material[0].emissiveMap = livre.material[0].map;
+
         livre.onClick = function (intersection) {
             console.log("position livre", livre.position);
             if (this.animationStatus == 0) {
@@ -945,7 +959,10 @@
         ecran2.material[0].emissiveMap = ecran2.material[0].map;
         ecran2.material[0].emissive = new THREE.Color(1.0, 1.0, 1.0);
 
-        let oeilGaucheVoldemort = object.getObjectByName("Head");
+        let teteVoldi = object.getObjectByName("head");
+        teteVoldi.material[3].emissive = new THREE.Color(1.0, 1.0, 1.0);
+
+
     }
 
     function onProgress(data) {
@@ -953,11 +970,11 @@
             var percentComplete = data.loaded / data.total * 100;
             document.getElementById('action').value = "Loading:" + percentComplete.toFixed(1) + '%';
         }
-    };
+    }
 
     function onError(data) {
         console.error(data);
-    };
+    }
 
     function drawCanvas(x, y) {
         if (textureEcran) {
@@ -979,89 +996,90 @@
 
     }
 
-    function updateCode(x,y) {
-    //but : modifier currentCode
-    let xcanvas = x*256;
-    let ycanvas = y*256;
+    function updateCode(x, y) {
+        //but : modifier currentCode
+        let xcanvas = x * 256;
+        let ycanvas = y * 256;
 
 
-    let col = parseInt((xcanvas-12)/75);
-    let lig = parseInt((ycanvas-6)/50);
+        let col = parseInt((xcanvas - 12) / 75);
+        let lig = parseInt((ycanvas - 6) / 50);
 
-    //console.log("col :",col);
-    //console.log("lig :",lig);
+        //console.log("col :",col);
+        //console.log("lig :",lig);
 
-    let codeCase= col + lig*3;
+        let codeCase = col + lig * 3;
 
-    //console.log("code Case :",codeCase);
+        //console.log("code Case :",codeCase);
 
-    let res = currentCode.split(" ");
-
-
-    //let res = ["Banana", "Orange", "Apple", "Mango"];
+        let res = currentCode.split(" ");
 
 
-    switch (codeCase){
-        case 0:
-            //currentCode = '';
-            res = res.slice(0,res.length -2);
-            currentCode = res.join(" ") + " ";
-            break;
+        //let res = ["Banana", "Orange", "Apple", "Mango"];
 
-        case 1:
-            currentCode = currentCode + "0 ";
-            break;
 
-        case 2:
-            currentCode = currentCode + "# ";
-            break;
+        switch (codeCase) {
+            case 0:
+                //currentCode = '';
+                res = res.slice(0, res.length - 2);
+                currentCode = res.join(" ") + " ";
+                break;
 
-        case 3:
-            currentCode = currentCode + "7 ";
-            break;
+            case 1:
+                currentCode = currentCode + "0 ";
+                break;
 
-        case 4:
-            currentCode = currentCode + "8 ";
-            break;
+            case 2:
+                currentCode = currentCode + "# ";
+                break;
 
-        case 5:
-            currentCode = currentCode + "9 ";
-            break;
+            case 3:
+                currentCode = currentCode + "7 ";
+                break;
 
-        case 6:
-            currentCode = currentCode + "4 ";
-            break;
+            case 4:
+                currentCode = currentCode + "8 ";
+                break;
 
-        case 7:
-            currentCode = currentCode + "5 ";
-            break;
+            case 5:
+                currentCode = currentCode + "9 ";
+                break;
 
-        case 8:
-            currentCode = currentCode + "6 ";
-            break;
+            case 6:
+                currentCode = currentCode + "4 ";
+                break;
 
-        case 9:
-            currentCode = currentCode + "1 ";
-            break;
+            case 7:
+                currentCode = currentCode + "5 ";
+                break;
 
-        case 10:
-            currentCode = currentCode + "2 ";
-            break;
+            case 8:
+                currentCode = currentCode + "6 ";
+                break;
 
-        case 11:
-            currentCode = currentCode + "3 ";
-            break;
+            case 9:
+                currentCode = currentCode + "1 ";
+                break;
+
+            case 10:
+                currentCode = currentCode + "2 ";
+                break;
+
+            case 11:
+                currentCode = currentCode + "3 ";
+                break;
+
+        }
+
+        currentCode = currentCode.slice(0, 10);
+
+        console.log("code : ", currentCode);
+        console.log("res : ", res);
+        console.log("code longueur : ", currentCode.length);
+
 
     }
 
-    currentCode = currentCode.slice(0,10);
-
-    console.log("code : ",currentCode);
-    console.log("res : ",res);
-    console.log("code longueur : ",currentCode.length);
-
-
-}
     /******************************************************************************/
     /* PROGRAMME PRINCIPAL ********************************************************/
     start();
