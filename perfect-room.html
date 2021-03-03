@@ -240,7 +240,7 @@
 
     let canvaTexture, canvaContext, textureEcran, canvaMaterial;
 
-    let hauteurRegard = 70, isMoving = false, listener, soundOn = false, tv;
+    let hauteurRegard = 60, isMoving = false, listener, soundOn = false, tv;
 
     function onClickEvent(event) {
         clickInfo.userHasClicked = true;
@@ -311,12 +311,6 @@
         spotLight.angle = 0.4;
         spotLight.intensity = 0.3;
         spotLight.penumbra = 0.3;
-        spotLight.castShadow = true;
-        spotLight.shadow.mapSize.width = 1024;
-        spotLight.shadow.mapSize.height = 1024;
-        spotLight.shadow.camera.near = 500;
-        spotLight.shadow.camera.far = 4000;
-        spotLight.shadow.camera.fov = 30;
 
         spotLight.color = new THREE.Color(1, 1, 1);
         camera.add(spotLight);
@@ -413,13 +407,13 @@
             let intersections = raycaster.intersectObjects(scene.children, true);
             let obj = null;
 
-            document.getElementById("positions").value = `(${clickInfo.mouse.x.toFixed(2)},${clickInfo.mouse.y.toFixed(2)})`;
+            //document.getElementById("positions").value = `(${clickInfo.mouse.x.toFixed(2)},${clickInfo.mouse.y.toFixed(2)})`;
             if (intersections.length > 0) {
                 obj = intersections[0].object;
                 while (obj != null && obj.name === "") {
                     obj = obj.parent;
                 }
-                document.getElementById("obj_name").value = `${obj.name} uv=(${intersections[0].uv.x.toFixed(2)},${intersections[0].uv.y.toFixed(2)})`;
+               // document.getElementById("obj_name").value = `${obj.name} uv=(${intersections[0].uv.x.toFixed(2)},${intersections[0].uv.y.toFixed(2)})`;
             }
 
             if (obj) {
@@ -460,7 +454,9 @@
         light1.penumbra = 43.0 / 60.0;
         light1.distance = 170.0 / 2.54;
         light1.target = object.getObjectByName('spot1.Target');
-        light1.visible = false; //éteint la lumière
+        light1.visible = true; //éteint la lumière
+
+
 
         let button = object.getObjectByName('button1');
         button.rotation.x = THREE.Math.degToRad(10.0);
@@ -509,6 +505,12 @@
         let spot2 = object.getObjectByName("spot2");
         spot2.power = 0.9 * Math.PI;
         spot2.visible = false;
+        spot2.castShadow = true;
+        spot2.shadow.mapSize.width = 1024;
+        spot2.shadow.mapSize.height = 1024;
+        spot2.shadow.camera.near = 500;
+        spot2.shadow.camera.far = 4000;
+        spot2.shadow.camera.fov = 30;
 
         button2.onClick = function (intersection) {
 
@@ -533,8 +535,13 @@
         //lumière plafond 2
         let spot3 = object.getObjectByName("spot3");
         spot3.power = 0.9 * Math.PI;
-        spot3.visible = false;
-
+        spot3.visible = true;
+        spot3.castShadow = true;
+        spot3.shadow.mapSize.width = 1024;
+        spot3.shadow.mapSize.height = 1024;
+        spot3.shadow.camera.near = 500;
+        spot3.shadow.camera.far = 4000;
+        spot3.shadow.camera.fov = 30;
 
         button3.onClick = function (intersection) {
 
