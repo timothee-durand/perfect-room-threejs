@@ -214,7 +214,7 @@
         <h2>The Perfect Room</h2>
         <p>Vous êtes un voleur. Vous vous apprêtez à pénétrer chez votre cible de ce soir. Votre but : découvrir ce qui est caché dans ce coffre et le voler !</p>
         <p>Avant de venir vous vous êtes renseigné : la personne qui vit ici a pour habitude de ne pas chercher ses codes bien loin. Alors soyez à l'affût d'indices !</p>
-        <p>Pour commencer à jouer, une fois cette fenêtre fermée, appuyez sur la touche espace !</p>
+        <p>Pour commencer à jouer, une fois cette fenêtre fermée, appuyez sur la touche espace ! SI vous êtes perdus dans 30 secondes vous pourrez débloquer un indice.</p>
         <button type="button" onclick="document.querySelector('.pop-up-back').classList.add('hidden')"  class="play-button">Jouer</button>
     </div>
 </div>
@@ -943,6 +943,7 @@
         ecran2.material[0].emissiveMap = ecran2.material[0].map;
         ecran2.material[0].emissive = new THREE.Color(1.0, 1.0, 1.0);
 
+        let oeilGaucheVoldemort = object.getObjectByName("Head");
     }
 
     function onProgress(data) {
