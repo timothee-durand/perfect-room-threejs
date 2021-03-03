@@ -200,7 +200,7 @@
         </tr>
         <tr>
             <td>
-                <button class="hidden" id="clueButton" onclick="document.querySelector('.clue').classList.remove('hidden')"
+                <button class="" id="clueButton" disabled onclick="document.querySelector('.clue').classList.remove('hidden')"
                         type="button">Avoir un indice
                 </button>
                 <p class="clue hidden">Avez vous cliqué sur le bouton vert ?</p>
@@ -373,8 +373,8 @@
         })
 
         setTimeout(function () {
-            document.querySelector("#clueButton").classList.remove("hidden");
-        }, 30000)
+            document.querySelector("#clueButton").disabled = false;
+        }, 20000)
     }
 
 
