@@ -1,2 +1,6 @@
 /three.js-dev/
-.idea
+.idea/
+/node_modules/
+.parcel-cache/
+dist/
+yarn-error.log

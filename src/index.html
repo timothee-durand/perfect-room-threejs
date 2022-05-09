@@ -3,163 +3,11 @@
 <head>
     <title>Perfect Room</title>
     <meta charset="UTF-8">
-    <link href="images/icon.png" rel="icon" type="image/png"/>
+    <link href="favicon.png" rel="icon" type="image/png"/>
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0px;
-            padding: 0px;
-            background-color: #ffffff;
-        }
-
-        #canvas {
-            display: block;
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            right: 434px;
-            bottom: 10px;
-            background-color: #000000;
-        }
-
-        #info {
-            display: block;
-            position: absolute;
-            width: 400px;
-            top: 10px;
-            right: 10px;
-            bottom: 10px;
-            background-color: white;
-            border: 2px solid white;
-            padding: 5px;
-            font-size: 14pt;
-            font-weight: bold;
-            color: black;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        input {
-            background-color: #e7e7e7;
-            border: none;
-            width: 260px;
-            color: black;
-            font-size: 14pt;
-            font-weight: bold;
-            padding: .5rem;
-            border-radius: 2rem;
-        }
-
-        #divTexture {
-            display: none;
-            position: absolute;
-            width: 256px;
-            height: 256px;
-            bottom: 5px;
-            left: 5px;
-            background-color: black;
-            border: 1px solid white;
-            padding: 0px;
-            color: white;
-        }
-
-        #canvasTexture {
-            width: 256px;
-            height: 256px;
-            background: white;
-        }
-
-        h1, h4, h2 {
-            font-family: 'Oswald', sans-serif;
-            color: #E07D32;
-        }
-
-        .title {
-            color: #9382E0;
-            margin-top: 1rem;
-        }
-
-        table {
-            margin-top: 1rem;
-        }
-
-        li {
-            list-style: none;
-        }
-
-        span {
-            color: #E07D32;
-            font-weight: bolder;
-        }
-
-        button {
-            outline: none;
-            border: none;
-            background-color: #fff;
-            box-shadow: 3px 3px 3px 0 #a9a9a9;
-            padding: 5px 10px;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            margin-top: 5px;
-            cursor: pointer;
-        }
-
-        .pop-up-back {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(50, 50, 50, 0.6);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .pop-up {
-            background-color: #fff;
-            border-radius: 20px;
-            width: 50%;
-            max-width: 700px;
-            padding: 20px;
-            position: relative;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin: 6px;
-            background: none;
-            box-shadow: none;
-            font-size: 20px;
-        }
-
-        .pop-up h2 {
-            margin: 0;
-        }
-
-        .play-button {
-            background-color: #E07D32;
-            color: #fff;
-            padding: 10px 20px;
-            display: block;
-            margin: auto;
-            width: 50%;
-        }
-
-        ul {
-            margin: 5px 0;
-        }
-    </style>
+    <link href="styles.css" rel="stylesheet"/>
 </head>
 <body>
 
@@ -230,28 +78,24 @@
     </div>
 </div>
 <script type="module">
-    import * as THREE from './three.js-dev/build/three.module.js';
-    //import { OrbitControls } from './three.js-dev/examples/jsm/controls/OrbitControls.js';
-    import {FirstPersonControls} from './three.js-dev/examples/jsm/controls/FirstPersonControls.js';
-    import {ColladaLoader} from './three.js-dev/examples/jsm/loaders/ColladaLoader.js';
-    import {MeshPhongMaterial, Vector2, Vector3} from "./three.js-dev/build/three.module.js";
+    import * as THREE from 'three';
+    import {FirstPersonControls} from "three/examples/jsm/controls/FirstPersonControls";
+    import {ColladaLoader} from "three/examples/jsm/loaders/ColladaLoader";
 
 
-    var clickInfo = [];
+    const clickInfo = [];
     //tableau qui contient la liste des objets clickables
     let animations = [], obstacles = [];
-    var container = document.getElementById("canvas");
+    const container = document.getElementById("canvas");
 
-    // variables utilisées par les deux fonctions
-    var renderer, camera, scene, controls;
-    var clock = new THREE.Clock();
-    var SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_LEFT, SCREEN_TOP;
+    // constiables utilisées par les deux fonctions
+    let renderer, camera, scene, controls;
+    const clock = new THREE.Clock();
+    let SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_LEFT, SCREEN_TOP;
     const raycaster = new THREE.Raycaster();
-    var currentCode = "", goodCode = "0 0 7 3 0 ";
-
-    let canvaTexture, canvaContext, textureEcran, canvaMaterial;
-
-    let hauteurRegard = 60, isMoving = false, listener, soundOn = false, tv;
+    let currentCode = "", goodCode = "0 0 7 3 0 ";
+    let canvasTexture, canvasContext, screenTexture, canvasMaterial, hauteurRegard = 60, isMoving = false, listener,
+        soundOn = false, tv;
 
     function onClickEvent(event) {
         clickInfo.userHasClicked = true;
@@ -340,19 +184,19 @@
         camera.add(listener);
 
         clock.start();
-        var loader = new ColladaLoader();
-        loader.load('./models/room_durand_gaultier_5.2.dae', onLoaded, onProgress, onError);
+        const loader = new ColladaLoader();
+        loader.load('/models/room_durand_gaultier_5.2.dae', onLoaded, onProgress, onError);
 
 // sources de lumière (une ambiante et une ponctuelle placée en [-10;100;200])
-//         var ambientLight = new THREE.AmbientLight(0x202020);
+//         const ambientLight = new THREE.AmbientLight(0x202020);
 //         scene.add(ambientLight);
 
-        canvaTexture = document.getElementById("canvasTexture");
-        canvaContext = canvaTexture.getContext("2d");
-        textureEcran = new Image();
-        textureEcran.src = "./models/textures/clavier_coffre.png";
+        canvasTexture = document.getElementById("canvasTexture");
+        canvasContext = canvasTexture.getContext("2d");
+        screenTexture = new Image();
+        screenTexture.src = "/models/textures/clavier_coffre.png";
 
-        console.log(canvaTexture, canvaContext, textureEcran)
+        console.log(canvasTexture, canvasContext, screenTexture)
 
         let boutonMute = document.querySelector("#muteSound");
         boutonMute.addEventListener("click", function () {
@@ -388,7 +232,7 @@
 
         // vérification collision avec sol
         if (scene.children) {
-            raycaster.set(camera.position, new Vector3(0, -1, 0))
+            raycaster.set(camera.position, new THREE.Vector3(0, -1, 0))
             let intersections = raycaster.intersectObjects(scene.children, true);
             let onFloor = false;
 
@@ -419,13 +263,11 @@
             let intersections = raycaster.intersectObjects(scene.children, true);
             let obj = null;
 
-            //document.getElementById("positions").value = `(${clickInfo.mouse.x.toFixed(2)},${clickInfo.mouse.y.toFixed(2)})`;
             if (intersections.length > 0) {
                 obj = intersections[0].object;
                 while (obj != null && obj.name === "") {
                     obj = obj.parent;
                 }
-                // document.getElementById("obj_name").value = `${obj.name} uv=(${intersections[0].uv.x.toFixed(2)},${intersections[0].uv.y.toFixed(2)})`;
             }
 
             if (obj) {
@@ -609,7 +451,7 @@
 
         livre.onClick = function (intersection) {
             console.log("position livre", livre.position);
-            if (this.animationStatus == 0) {
+            if (this.animationStatus === 0) {
                 this.animationStatus = 1;
             }
         }
@@ -651,7 +493,7 @@
         tiroir.waitTime = 4;
         tiroir.onClick = function (intersection) {
             console.log("position tiroir", tiroir.position);
-            if (this.animationStatus == 0) {
+            if (this.animationStatus === 0) {
                 this.animationStatus = 1;
             }
         }
@@ -851,9 +693,9 @@
         }
         animations.push(poignee)
 
-        canvaMaterial = new THREE.CanvasTexture(canvaTexture);
+        canvasMaterial = new THREE.CanvasTexture(canvasTexture);
         console.log(porte)
-        porte.children[2].material[1].emissiveMap = canvaMaterial;
+        porte.children[2].material[1].emissiveMap = canvasMaterial;
         porte.children[2].material[1].emissive = new THREE.Color(1.0, 1.0, 1.0);
         drawCanvas();
         //
@@ -967,7 +809,7 @@
 
     function onProgress(data) {
         if (data.lengthComputable) {
-            var percentComplete = data.loaded / data.total * 100;
+            const percentComplete = data.loaded / data.total * 100;
             document.getElementById('action').value = "Loading:" + percentComplete.toFixed(1) + '%';
         }
     }
@@ -977,22 +819,22 @@
     }
 
     function drawCanvas(x, y) {
-        if (textureEcran) {
+        if (screenTexture) {
             updateCode(x, y);
 
-            canvaContext.drawImage(textureEcran, 0, 0, 256, 256);
-            canvaContext.beginPath();
-            canvaContext.font = "40px Arial Black";
-            canvaContext.fillStyle = "white";
-            canvaContext.fillText(currentCode, 32, 40)
+            canvasContext.drawImage(screenTexture, 0, 0, 256, 256);
+            canvasContext.beginPath();
+            canvasContext.font = "40px Arial Black";
+            canvasContext.fillStyle = "white";
+            canvasContext.fillText(currentCode, 32, 40)
 
             console.log(x * 256, y * 256)
-            canvaContext.fillStyle = "red";
-            canvaContext.arc(x * 256, (1 - y) * 256, 12, 0, 2 * Math.PI);
-            canvaContext.fill()
+            canvasContext.fillStyle = "red";
+            canvasContext.arc(x * 256, (1 - y) * 256, 12, 0, 2 * Math.PI);
+            canvasContext.fill()
         }
 
-        canvaMaterial.needsUpdate = true;
+        canvasMaterial.needsUpdate = true;
 
     }
 
