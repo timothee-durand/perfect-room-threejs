@@ -20,17 +20,21 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        name: Checkout
 
       - uses: borales/actions-yarn@v2.3.0
+        name : Install packages
         with:
-          cmd: install # will run `yarn install` command
+          cmd: install
+
       - uses: borales/actions-yarn@v2.3.0
+        name : Predeploy
         with:
-          cmd: build # will run `yarn build` command
+          cmd: predeploy
+
       - uses: borales/actions-yarn@v2.3.0
+        name: Deploy
         with:
           cmd: deploy # will run `yarn test` command
