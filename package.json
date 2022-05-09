@@ -8,7 +8,9 @@
   "source": "src/index.html",
   "scripts": {
     "start": "parcel",
-    "build": "parcel build"
+    "build": "parcel build",
+    "predeploy": "rm -rf dist && parcel build --public-url 'https://timothee-durand.github.io/perfect-room-threejs/'",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "three": "^0.140.1"
