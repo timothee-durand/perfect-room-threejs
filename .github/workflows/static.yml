@@ -40,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Build
-        run: yarn build
+        run: yarn build --public-url 'https://timothee-durand.github.io/perfect-room-threejs/'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
